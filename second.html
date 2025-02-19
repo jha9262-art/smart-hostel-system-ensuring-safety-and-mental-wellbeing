@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Hostel System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #004d99;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            position: relative;
+        }
+
+        .profile-menu-container {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .profile-icon {
+            cursor: pointer;
+            font-size: 1.5rem;
+            background-color: white;
+            color: #004d99;
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-radius: 5px;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: #004d99;
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f8ff;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #007acc;
+            padding: 10px;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 250px;
+        }
+
+        .card h3 {
+            color: #004d99;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007acc;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005ea6;
+        }
+
+        #security-dashboard,
+        #wellbeing-dashboard,
+        #community-dashboard,
+        #profile-section,
+        #settings-section,
+        #logout-section {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+
+        .normal {
+            color: green;
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                window.location.href = 'login.html';
+            }
+        });
+
+        function showSecurityDashboard() {
+            hideAllSections();
+            document.getElementById('security-dashboard').style.display = 'block';
+        }
+
+        function showWellbeingDashboard() {
+            hideAllSections();
+            document.getElementById('wellbeing-dashboard').style.display = 'block';
+        }
+
+        function showCommunityDashboard() {
+            hideAllSections();
+            document.getElementById('community-dashboard').style.display = 'block';
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profile-dropdown');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function showProfileSection() {
+            hideAllSections();
+            document.getElementById('profile-section').style.display = 'block';
+        }
+
+        function showSettingsSection() {
+            hideAllSections();
+            document.getElementById('settings-section').style.display = 'block';
+        }
+
+        function showLogoutSection() {
+            hideAllSections();
+            document.getElementById('logout-section').style.display = 'block';
+        }
+
+        function hideLogoutSection() {
+            document.getElementById('logout-section').style.display = 'none';
+        }
+
+        function hideAllSections() {
+            document.getElementById('profile-section').style.display = 'none';
+            document.getElementById('settings-section').style.display = 'none';
+            document.getElementById('logout-section').style.display = 'none';
+            document.getElementById('security-dashboard').style.display = 'none';
+            document.getElementById('wellbeing-dashboard').style.display = 'none';
+            document.getElementById('community-dashboard').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+        
+        function markAttendance() {
+            const attendanceSection = document.getElementById('attendance-section');
+            attendanceSection.style.display = 'block';
+            document.getElementById('attendance-status').innerText = 'Attendance Marked Successfully ✅';
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <header>
+        🏨 Smart Hostel System
+        <div class="profile-menu-container">
+            <div class="profile-icon" onclick="toggleMenu()">👤</div>
+            <div class="dropdown-menu" id="profile-dropdown">
+                <a href="#" onclick="showProfileSection()">View Profile</a>
+                <a href="#" onclick="showSettingsSection()">Settings</a>
+                <a href="#" onclick="showLogoutSection()">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#security" onclick="showSecurityDashboard()">Security</a>
+        <a href="#wellbeing" onclick="showWellbeingDashboard()">Wellbeing</a>
+        <a href="#community" onclick="showCommunityDashboard()">Community</a>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h3>Security Monitoring</h3>
+            <button onclick="showSecurityDashboard()">View Security Dashboard</button>
+        </div>
+
+        <div class="card">
+            <h3>Mental Wellbeing</h3>
+            <button onclick="showWellbeingDashboard()">View Wellbeing Dashboard</button>
+        </div>
+
+        <div class="card">
+            <h3>Community Engagement</h3>
+            <button onclick="showCommunityDashboard()">View Community Dashboard</button>
+        </div>
+
+
+        <div class="card">
+            <h3>Attendance</h3>
+            <button onclick="markAttendance()">Mark Attendance</button>
+        </div>
+        <div id="attendance-section" class="card">
+            <h3>Attendance Status</h3>
+            <p id="attendance-status">Not Marked</p>
+        </div>
+        
+
+        <!-- Profile Section -->
+        <div id="profile-section">
+            <h2>👤 Your Profile</h2>
+            <p><strong>Name:</strong> Balaji jha</p>
+            <p><strong>Room:</strong> B-203</p>
+            <p><strong>Contact:</strong> +1234567890</p>
+            <p><strong>Email:</strong> balajijha3@example.com</p>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings-section">
+            <h2>⚙️ Settings</h2>
+            <label><input type="checkbox" checked> Receive Security Alerts</label><br>
+            <label><input type="checkbox" checked> Receive Wellbeing Updates</label><br>
+            <input type="password" placeholder="New Password">
+            <button onclick="alert('Password updated successfully')">Update Password</button>
+        </div>
+
+        <!-- Logout Section -->
+        <div id="logout-section">
+            <h2>🔒 Confirm Logout</h2>
+            <button onclick="logout()">Logout</button>
+            <button onclick="hideLogoutSection()">Cancel</button>
+        </div>
+
+       <!-- Security Dashboard Section -->
+       <div id="security-dashboard">
+        <h2>📹 Security Monitoring Dashboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Camera Location</th>
+                    <th>Status</th>
+                    <th>Alert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Main Gate</td>
+                    <td>Active</td>
+                    <td class="normal">No Issues</td>
+                </tr>
+                <tr>
+                    <td>Hostel Entrance</td>
+                    <td>Active</td>
+                    <td class="alert">Unauthorized Entry Detected</td>
+                </tr>
+                <tr>
+                    <td>Floor 2 Corridor</td>
+                    <td>Active</td>
+                    <td class="normal">No Issues</td>
+                </tr>
+                <tr>
+                    <td>Common Room</td>
+                    <td>Inactive</td>
+                    <td class="alert">Camera Offline</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Wellbeing Dashboard Section -->
+    <div id="wellbeing-dashboard">
+        <h2>💚 Mental Wellbeing Dashboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Counselor Availability</td>
+                    <td>Dr. Jane Doe - Available from 10 AM to 4 PM</td>
+                    <td class="normal">Open</td>
+                </tr>
+                <tr>
+                    <td>Upcoming Workshop</td>
+                    <td>Stress Management - 15th March, 3 PM</td>
+                    <td class="normal">Open for Registration</td>
+                </tr>
+                <tr>
+                    <td>Anonymous Help Line</td>
+                    <td>Contact: 1800-123-4567</td>
+                    <td class="normal">24/7</td>
+                </tr>
+                <tr>
+                    <td>Peer Support Group</td>
+                    <td>Every Friday - 5 PM at Common Room</td>
+                    <td class="normal">Active</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Community Dashboard Section -->
+    <div id="community-dashboard">
+        <h2>🤝 Community Engagement Dashboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Upcoming Event</td>
+                    <td>Cultural Fest - 20th March, 5 PM</td>
+                    <td class="normal">Open for Registration</td>
+                </tr>
+                <tr>
+                    <td>Discussion Forum</td>
+                    <td>Weekly Debate Club - Every Thursday, 4 PM</td>
+                    <td class="normal">Active</td>
+                </tr>
+                <tr>
+                    <td>Volunteer Program</td>
+                    <td>Hostel Clean-Up Drive - 25th March, 9 AM</td>
+                    <td class="normal">Open</td>
+                </tr>
+                <tr>
+                    <td>Peer Networking</td>
+                    <td>Meet & Greet - 18th March, 6 PM</td>
+                    <td class="normal">Active</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Added Motivational Quote Section -->
+    <div class="card">
+        <h3>🌟 Daily Motivation</h3>
+        <p id="motivational-quote">"Your limitation—it's only your imagination."</p>
+    </div>
+</div>
+</body>
+
+</html>
